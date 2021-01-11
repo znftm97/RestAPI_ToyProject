@@ -1,6 +1,7 @@
 package com.restful.api.controller;
 
 import com.restful.api.entity.User;
+import com.restful.api.exception.CUserNotFoundException;
 import com.restful.api.model.response.CommonResult;
 import com.restful.api.model.response.ListResult;
 import com.restful.api.model.response.SingleResult;
@@ -19,16 +20,16 @@ public class UserController {
     private final UserRepository userRepository;
     private final ResponseService responseService;
 
-    @ApiOperation(value = "회원 리스트 조회", notes = "모든 회원을 조회")
+    @ApiOperation(value = "회원 리스트 조회", notes = "모든 회원 조회")
     @GetMapping(value = "/users")
     public ListResult<User> findAllUser() {
         return responseService.getListResult(userRepository.findAll());
     }
 
-    @ApiOperation(value = "회원 단건 조회", notes = "회원번호(msrl)로 회원을 조회")
-    @GetMapping(value = "/user/{msrl}")
-    public SingleResult<User> findUserById(@ApiParam(value = "회원 번호", required = true) @RequestParam Long msrl) {
-        return responseService.getSingleResult(userRepository.findById(msrl).orElse(null));
+    @ApiOperation(value = "회원 단건 조회", notes = "uid로 회원 조회")
+    @GetMapping(value = "/user/{uid}")
+    public SingleResult<User> findUserById(@ApiParam(value = "회원 uid", required = true) @PathVariable String uid) {
+        return responseService.getSingleResult(userRepository.findByUid(uid).orElseThrow(CUserNotFoundException::new));
     }
 
     @ApiOperation(value = "회원 입력")

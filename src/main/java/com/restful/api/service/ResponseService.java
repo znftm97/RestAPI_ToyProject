@@ -11,7 +11,8 @@ import java.util.List;
 public class ResponseService {
 
     public enum CommonResponse {
-        SUCCESS(0, "성공하였습니다.");
+        SUCCESS(0, "성공"),
+        FAIL(-1, "실패");
 
         int code;
         String msg;
@@ -54,11 +55,11 @@ public class ResponseService {
     }
 
     // 실패 결과만 처리하는 메소드
-    public CommonResult getFailResult(int code, String msg) {
+    public CommonResult getFailResult() {
         CommonResult result = new CommonResult();
         result.setSuccess(false);
-        result.setCode(code);
-        result.setMsg(msg);
+        result.setCode(CommonResponse.FAIL.getCode());
+        result.setMsg(CommonResponse.FAIL.getMsg());
         return result;
     }
 
