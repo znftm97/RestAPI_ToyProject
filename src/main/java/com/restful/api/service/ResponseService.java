@@ -12,7 +12,8 @@ public class ResponseService {
 
     public enum CommonResponse {
         SUCCESS(0, "성공"),
-        FAIL(-1, "실패");
+        FAIL(-1, "실패"),
+        LOGINFAIL(-2, "계정이 없거나 이메일 또는 비밀번호가 정확하지 않음");
 
         int code;
         String msg;
@@ -68,6 +69,15 @@ public class ResponseService {
         result.setSuccess(true);
         result.setCode(CommonResponse.SUCCESS.getCode());
         result.setMsg(CommonResponse.SUCCESS.getMsg());
+    }
+
+    //로그인 실패 결과 처리
+    public CommonResult getFailResultLogin(){
+        CommonResult result = new CommonResult();
+        result.setSuccess(false);
+        result.setCode(CommonResponse.LOGINFAIL.getCode());
+        result.setMsg(CommonResponse.LOGINFAIL.getMsg());
+        return result;
     }
 
 }

@@ -2,7 +2,7 @@ package com.restful.api.controller;
 
 import com.restful.api.config.security.JwtTokenProvider;
 import com.restful.api.entity.User;
-import com.restful.api.exception.CEmailSigninFailedException;
+import com.restful.api.exception.CSigninFailedException;
 import com.restful.api.model.response.CommonResult;
 import com.restful.api.model.response.SingleResult;
 import com.restful.api.repository.UserRepository;
@@ -50,9 +50,9 @@ public class SignController {
     public SingleResult<String> signin(@ApiParam(value = "회원ID : 이메일", required = true) @RequestParam String id,
                                        @ApiParam(value = "비밀번호", required = true) @RequestParam String password) {
 
-        User user = userRepository.findByUid(id).orElseThrow(CEmailSigninFailedException::new);
+        User user = userRepository.findByUid(id).orElseThrow(CSigninFailedException::new);
         if (!passwordEncoder.matches(password, user.getPassword()))
-            throw new CEmailSigninFailedException();
+            throw new CSigninFailedException();
 
         return responseService.getSingleResult(jwtTokenProvider.createToken(String.valueOf(user.getMsrl()), user.getRoles()));
     }
