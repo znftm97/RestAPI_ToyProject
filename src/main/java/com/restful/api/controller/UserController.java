@@ -20,12 +20,19 @@ public class UserController {
     private final UserRepository userRepository;
     private final ResponseService responseService;
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "회원 리스트 조회", notes = "모든 회원 조회")
     @GetMapping(value = "/users")
     public ListResult<User> findAllUser() {
         return responseService.getListResult(userRepository.findAll());
     }
 
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "회원 단건 조회", notes = "uid로 회원 조회")
     @GetMapping(value = "/user/{uid}")
     public SingleResult<User> findUserById(@ApiParam(value = "회원 uid", required = true) @PathVariable String uid) {
@@ -43,6 +50,9 @@ public class UserController {
         return responseService.getSingleResult(userRepository.save(user));
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "회원 수정")
     @PutMapping(value = "/user")
     public SingleResult<User> modify(
@@ -58,6 +68,9 @@ public class UserController {
         return responseService.getSingleResult(userRepository.save(user));
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "회원 삭제", notes = "userId로 회원정보를 삭제")
     @DeleteMapping(value = "/user/{msrl}")
     public CommonResult delete(
