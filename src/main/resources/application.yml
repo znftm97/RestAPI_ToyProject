@@ -13,9 +13,26 @@ spring:
         #show_sql: true 이건 콘솔에 로그를 찍음
         #쿼리 이쁘게 나옴
         format_sql: true
+
   data:
     jwt:
       secret: 951027!@#
+
+  social:
+    kakao:
+      client_id: d60bea1625cd24d7f3e746c14d09987e
+      redirect: /social/login/kakao
+      url:
+        login: https://kauth.kakao.com/oauth/authorize
+        token: https://kauth.kakao.com/oauth/token
+        profile: https://kapi.kakao.com/v2/user/me
+  url:
+    base: http://localhost:8080
+
+  freemarker:
+    template-loader-path: classpath:/templates
+    suffix: .ftl
+
 
 logging.level:
   #콘솔이 아니라 로그파일로 남김

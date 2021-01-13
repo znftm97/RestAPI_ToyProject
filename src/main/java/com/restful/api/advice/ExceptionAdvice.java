@@ -1,5 +1,7 @@
 package com.restful.api.advice;
 
+import com.restful.api.advice.exception.CAuthenticationEntryPointException;
+import com.restful.api.exception.CCommunicationException;
 import com.restful.api.exception.CSigninFailedException;
 import com.restful.api.exception.CUserNotFoundException;
 import com.restful.api.model.response.CommonResult;
@@ -28,6 +30,18 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected CommonResult emailSigninFailed(HttpServletRequest request, CSigninFailedException e) {
         return responseService.getFailResultLogin();
+    }
+
+    @ExceptionHandler(CCommunicationException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected CommonResult socialLoginFiled(HttpServletRequest request, CCommunicationException e) {
+        return responseService.getFailResultLogin();
+    }
+
+    @ExceptionHandler(CAuthenticationEntryPointException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected CommonResult socialLoginFiled(HttpServletRequest request, CAuthenticationEntryPointException e) {
+        return responseService.getFailResultJwt();
     }
 }
 

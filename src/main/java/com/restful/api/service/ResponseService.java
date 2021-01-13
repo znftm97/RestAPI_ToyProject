@@ -13,7 +13,9 @@ public class ResponseService {
     public enum CommonResponse {
         SUCCESS(0, "성공"),
         FAIL(-1, "실패"),
-        LOGINFAIL(-2, "계정이 없거나 이메일 또는 비밀번호가 정확하지 않음");
+        LOGINFAIL(-2, "계정이 없거나 이메일 또는 비밀번호가 정확하지 않음"),
+        SOCIALLOGINFAIL(-3, "통신중 오류 발생"),
+        JWTVALIDFAIL(-4, "리소스에 대한 권한 없음");
 
         int code;
         String msg;
@@ -77,6 +79,24 @@ public class ResponseService {
         result.setSuccess(false);
         result.setCode(CommonResponse.LOGINFAIL.getCode());
         result.setMsg(CommonResponse.LOGINFAIL.getMsg());
+        return result;
+    }
+
+    //소셜(카카오) 로그인 실패 결과 처리
+    public CommonResult getFailResultSocialLogin(){
+        CommonResult result = new CommonResult();
+        result.setSuccess(false);
+        result.setCode(CommonResponse.SOCIALLOGINFAIL.getCode());
+        result.setMsg(CommonResponse.SOCIALLOGINFAIL.getMsg());
+        return result;
+    }
+
+    //JWT 없을때 결과 처리
+    public CommonResult getFailResultJwt(){
+        CommonResult result = new CommonResult();
+        result.setSuccess(false);
+        result.setCode(CommonResponse.JWTVALIDFAIL.getCode());
+        result.setMsg(CommonResponse.JWTVALIDFAIL.getMsg());
         return result;
     }
 

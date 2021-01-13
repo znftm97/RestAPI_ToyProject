@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String uid;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String password;
 
     @Column(nullable = false, length = 100)
@@ -37,6 +37,9 @@ public class User implements UserDetails {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
+    @Column(length = 100)
+    private String provider;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
