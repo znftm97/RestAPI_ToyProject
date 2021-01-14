@@ -1,5 +1,6 @@
 package com.restful.api.service;
 
+import com.restful.api.config.CacheKey;
 import com.restful.api.entity.Board;
 import com.restful.api.entity.Post;
 import com.restful.api.entity.User;
@@ -11,6 +12,7 @@ import com.restful.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -27,26 +29,31 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CacheService cacheService;
 
     public Board insertBoard(String boardName) {
         return boardRepository.save(Board.builder().name(boardName).build());
     }
 
+    @Cacheable(value = CacheKey.BOARD, key = "#boardName", unless = "#result == null")
     public Board findBoard(String boardName) {
         return Optional.ofNullable(boardRepository.findByName(boardName)).orElseThrow(CUserNotFoundException::new);
     }
 
     // 게시판 이름으로 게시글 리스트 조회.
+    @Cacheable(value = CacheKey.POSTS, key = "#boardName", unless = "#result == null")
     public List<Post> findPosts(String boardName) {
         return postRepository.findByBoard(findBoard(boardName));
     }
 
     // 게시글ID로 게시글 단건 조회. 없을경우 CResourceNotExistException 처리
+    @Cacheable(value = CacheKey.POST, key = "#postId", unless = "#result == null")
     public Post getPost(long postId) {
         return postRepository.findById(postId).orElseThrow(CUserNotFoundException::new);
     }
 
     // 게시글을 등록합니다. 게시글의 회원UID가 조회되지 않으면 CUserNotFoundException 처리합니다.
+    @CacheEvict(value = CacheKey.POSTS, key = "#boardName")
     public Post writePost(String uid, String boardName, PostDto paramsPost) {
         Board board = findBoard(boardName);
         Post post = new Post(userRepository.findByUid(uid).orElseThrow(CUserNotFoundException::new), board, paramsPost.getAuthor(), paramsPost.getTitle(), paramsPost.getContent());
@@ -59,6 +66,7 @@ public class BoardService {
         User user = post.getUser();
 
         post.setUpdate(paramsPost.getAuthor(), paramsPost.getTitle(), paramsPost.getContent());
+        cacheService.deleteBoardCache(post.getPostId(), post.getBoard().getName());
         return post;
     }
 

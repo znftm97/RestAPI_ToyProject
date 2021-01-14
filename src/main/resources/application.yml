@@ -33,6 +33,10 @@ spring:
     template-loader-path: classpath:/templates
     suffix: .ftl
 
+  redis:
+    host: localhost
+    port: 6379
+
 
 logging.level:
   #콘솔이 아니라 로그파일로 남김
