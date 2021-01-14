@@ -1,15 +1,16 @@
 package com.restful.api.controller;
 
 import com.restful.api.service.KakaoService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+@Api(tags = {"4. Social"})
 @RequiredArgsConstructor
 @Controller
 public class SocialController {
